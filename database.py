@@ -1,8 +1,8 @@
 import gspread
 
-#getRows containing names passed
-#input: list of names, google connection
-#output: list of rows containing names
+#Gets rows containing names passed
+#Inputs: list of names, google connection
+#Outputs: list of rows containing names
 #Format of output: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
 def getRows(names, gc):
     database = gc.open("Among Us Ranks")
@@ -10,9 +10,9 @@ def getRows(names, gc):
     entries = sheet.get_all_values()
     return [entry for entry in entries if entry[1] in names]
 
-#addEntries updates entries on google sheet
-#input: list of entries, google connection
-#output: T/F
+#Updates entries on google sheet
+#Inputs: list of entries, google connection
+#Outputs: succeeds
 #format of an entry: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
 def updateEntries(entries, gc):
     database = gc.open("Among Us Ranks")
@@ -27,9 +27,9 @@ def updateEntries(entries, gc):
     sheet.batch_update(update, value_input_option='USER_ENTERED')
     return True
 
-#addEntries adds entries to google sheet
-#input: list of entries, google connection
-#output: T/F
+#Adds entries to google sheet
+#Inputs: list of entries, google connection
+#Outputs: succeeds
 #format of an entry: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
 def addEntries(entries, gc):
     database = gc.open("Among Us Ranks")
@@ -40,7 +40,3 @@ def addEntries(entries, gc):
     update = [[row[0]] + entry[1:9] + [row[-1]] for entry, row in zip(entries, update)]
     updateEntries(update, gc)
     return True
-
-if __name__ == '__main__':
-    gc = gspread.service_account(filename='client_secret.json')
-    addEntries([['0', 'Peter', 'Bronze 1', '20', '10', '0', '0', '10', '0', '0']], gc)
