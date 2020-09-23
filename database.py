@@ -12,7 +12,7 @@ def getRows(names, gc):
 
 #addEntries updates entries on google sheet
 #input: list of entries, google connection
-#output: None
+#output: T/F
 #format of an entry: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
 def updateEntries(entries, gc):
     database = gc.open("Among Us Ranks")
@@ -25,10 +25,11 @@ def updateEntries(entries, gc):
         update.append({'range': start + entry[0] + ':' + start + entry[0], 'values': [[entry[1]]]})
         update.append({'range': startstats + entry[0] + ':' + end + entry[0], 'values': [entry[3:-1]]})
     sheet.batch_update(update, value_input_option='USER_ENTERED')
+    return True
 
 #addEntries adds entries to google sheet
 #input: list of entries, google connection
-#output: None
+#output: T/F
 #format of an entry: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
 def addEntries(entries, gc):
     database = gc.open("Among Us Ranks")
@@ -36,8 +37,9 @@ def addEntries(entries, gc):
     update = sheet.get_all_values()
     update = [entry for entry in update if entry[1] == '']
     update = update[:len(entries)]
-    update = [[row[0], entry[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], row[-1]] for entry, row in zip(entries, update)]
+    update = [[row[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], row[-1]] for entry, row in zip(entries, update)]
     updateEntries(update, gc)
+    return True
 
 
 if __name__ == '__main__':
