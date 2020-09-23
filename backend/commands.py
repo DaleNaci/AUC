@@ -1,10 +1,12 @@
-import database, gspread, json
+import backend.database, gspread, json, os
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 winelo = {}
 losselo = {}
-with open('Data/winelo.json') as f:
+with open(dir_path + '\\Data\\winelo.json') as f:
   winelo = json.load(f)
-with open('Data/losselo.json') as f:
+with open(dir_path + '\\Data\\losselo.json') as f:
   losselo = json.load(f)
 
 #Determines how much ELO should change based on rank
@@ -116,7 +118,3 @@ def changeName(oldname, newname):
     entries[0][1] = newname
     database.updateEntries(entries, gc)
     return True
-
-if __name__ == '__main__':
-    addGame(['Peter', 'Dale'], ['Dale'], True)
-    changeName('Dale', 'Loser')
