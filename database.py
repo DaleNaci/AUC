@@ -37,11 +37,10 @@ def addEntries(entries, gc):
     update = sheet.get_all_values()
     update = [entry for entry in update if entry[1] == '']
     update = update[:len(entries)]
-    update = [[row[0], entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], entry[7], entry[8], row[-1]] for entry, row in zip(entries, update)]
+    update = [[row[0]] + entry[1:9] + [row[-1]] for entry, row in zip(entries, update)]
     updateEntries(update, gc)
     return True
 
-
 if __name__ == '__main__':
     gc = gspread.service_account(filename='client_secret.json')
-    updateEntries([['3', 'Dale', 'Bronze 2', 900, 10, 2, 1, 5, 5, 0]], gc)
+    addEntries([['0', 'Peter', 'Bronze 1', '20', '10', '0', '0', '10', '0', '0']], gc)

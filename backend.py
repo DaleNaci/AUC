@@ -1,11 +1,16 @@
-import database, gspread
+import database, gspread, json
+
+winelo = {}
+losselo = {}
+with open('winelo.json') as f:
+  winelo = json.load(f)
+with open('losslo.json') as f:
+  losselo = json.load(f)
 
 #Determines how much ELO should change based on rank
-#Input: 'rank' result-T(Win)/F(Lost) imp-T(imp)/F(crew) place-T(in placements)/F(not)
+#Input: 'rank' result-T(Win)/F(Lost) imp-True(imp)/False(crew) place-True(in placements)/False(not)
 #Output: elochange
 def getEloChange(rank, result, imp, place):
-    winelo = {'Bronze 1': 35, 'Bronze 2': 30, 'Bronze 3': 30, 'Silver 1': 30, 'Silver 2': 25, 'Silver 3': 25, 'Gold 1': 25, 'Gold 2': 20, 'Gold 3': 20, 'Diamond 1': 20, 'Diamond 2': 15, 'Diamond 3': 15, 'Legend': 15}
-    losselo = {'Bronze 1': -10, 'Bronze 2': -10, 'Bronze 3': -15, 'Silver 1': -15, 'Silver 2': -20, 'Silver 3': -20, 'Gold 1': -25, 'Gold 2': -25, 'Gold 3': -25, 'Diamond 1': -25, 'Diamond 2': -25, 'Diamond 3': -30, 'Legend': -30}
     elochange = 0
     if result:
         elochange = winelo[rank]
@@ -53,7 +58,7 @@ def adjustElo(entry, result, imp):
 baseentry = ['0', '', 'Silver 1', '300', '0', '0', '0', '0', '0', '0']
 
 #A function to add a game to the database
-#Input: [names] [imps] result-T(Crew win)/F(Imp win)
+#Input: [names of players] [names of imps] result-True(Crew win)/False(Imp win)
 #Output: T/F
 def addGame(names, imps, result):
     gc = gspread.service_account(filename='client_secret.json')
@@ -62,7 +67,6 @@ def addGame(names, imps, result):
     newentrynames = []
     if not entrynames:
         newentrynames = names.copy()
-        print('Hi')
     else:
         newentrynames = [name for name in names if not name in entrynames]
     newentries = [baseentry.copy() for name in newentrynames]
@@ -97,13 +101,8 @@ def addGame(names, imps, result):
                 addWin(entry, False)
                 adjustElo(entry, True, False)
             else:
-                addWin(entry, False)
-                adjustElo(entry, True, False)
+                addLoss(entry, False)
+                adjustElo(entry, False, False)
     database.addEntries(newentries, gc)
     database.updateEntries(entries, gc)
     return True
-
-
-if __name__ == '__main__':
-    addGame(['Peter', 'Dale', 'Greg', 'Jose', 'Anthony', 'Orange Man', 'Pink', 'Monkey', 'huh', 'Boy'], ['Boy', 'huh'], True)
-    
