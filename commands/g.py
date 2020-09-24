@@ -14,10 +14,11 @@ class G(commands.Cog):
 
 
     @commands.command()
-    async def g(self, ctx, message):
+    async def g(self, ctx):
         content = ctx.message.content.split()[1:]
         user_ids = [int(s[3:-1]) for s in content[:10]]
-        guild = self.bot.get_guild(510115905041203200)
+        # guild = self.bot.get_guild(510115905041203200)
+        guild = ctx.message.guild
 
         line = []
         for word in content:
