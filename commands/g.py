@@ -1,4 +1,5 @@
 import asyncio
+import re
 
 import discord
 from discord.ext.commands import Bot
@@ -14,10 +15,13 @@ class G(commands.Cog):
 
 
     @commands.command()
+    @commands.has_role("GameMod")
     async def g(self, ctx):
-        content = ctx.message.content.split()[1:]
+        content = ctx.message.content
+        content = re.sub(" +", " ", content)
+        content = content.split()[1:]
+
         user_ids = [int(s[3:-1]) for s in content[:10]]
-        # guild = self.bot.get_guild(510115905041203200)
         guild = ctx.message.guild
 
         line = []
@@ -39,13 +43,36 @@ class G(commands.Cog):
                 imps_wins.append((imps, word.upper() == "C"))
                 imps = []
 
-        print(members)
-        print(imps_wins)
-
         for t in imps_wins:
             db.addGame(members, t[0], t[1])
 
-        await ctx.channel.send("Done")
+        embed = Embed(
+            title="Game Results",
+            color=Color.from_rgb(0, 0, 0)
+        )
+
+        embed.add_field(
+            name="Players",
+            value=", ".join(members),
+            inline=False
+        )
+
+        i = 1
+        for t in imps_wins:
+            imps = f"{t[0][0]}, {t[0][1]}"
+            if t[1]:
+                text = "CREWMATES WIN"
+            else:
+                text = "IMPOSTORS WIN"
+
+            embed.add_field(
+                name=f"Game {i}",
+                value=f"Imps: {imps}\n`{text}`",
+                inline=False
+            )
+            i += 1
+
+        await ctx.send(embed=embed)
 
 
 
