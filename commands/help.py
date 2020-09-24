@@ -22,7 +22,11 @@ class Help(commands.Cog):
         for k, v in self.command_descs.items():
             desc += f"`{k}`: {v}\n"
 
-        embed = Embed(title="Commands", color=Color.dark_gray(), description=desc)
+        embed = Embed(
+            title="Commands",
+            color=Color.dark_gray(),
+            description=desc
+        )
 
         await ctx.send(embed=embed)
 
