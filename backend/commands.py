@@ -1,12 +1,11 @@
-import backend.database, gspread, json, os
-
-dir_path = os.path.dirname(os.path.realpath(__file__))
+import backend.database, gspread, json
+from backend import data_folder
 
 winelo = {}
 losselo = {}
-with open(dir_path + '\\Data\\winelo.json') as f:
+with open(data_folder / 'winelo.json') as f:
   winelo = json.load(f)
-with open(dir_path + '\\Data\\losselo.json') as f:
+with open(data_folder / 'losselo.json') as f:
   losselo = json.load(f)
 
 #Determines how much ELO should change based on rank
