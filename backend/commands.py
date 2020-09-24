@@ -1,4 +1,5 @@
-import backend.database, gspread, json
+import gspread, json
+import backed.database as database
 from backend import data_folder
 
 winelo = {}
