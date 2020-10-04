@@ -10,7 +10,9 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.command_descs = {
-            "!help": "Provides information about all commands."
+            "!help": "Provides information about all commands.",
+            "!g": "Scorers use this to score games.",
+            "!name": "Use this to rename yourself."
         }
 
 
@@ -20,7 +22,11 @@ class Help(commands.Cog):
         for k, v in self.command_descs.items():
             desc += f"`{k}`: {v}\n"
 
-        embed = Embed(title="Commands", color=Color.blue(), description=desc)
+        embed = Embed(
+            title="Commands",
+            color=Color.dark_gray(),
+            description=desc
+        )
 
         await ctx.send(embed=embed)
 

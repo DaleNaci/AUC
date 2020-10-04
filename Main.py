@@ -13,7 +13,10 @@ bot = commands.Bot(command_prefix = "!")
 bot.remove_command("help")
 
 cogs = [
-    "commands.help"
+    "commands.help",
+    "commands.g",
+    "commands.name",
+    "commands.test"
 ]
 
 if __name__ == "__main__":
