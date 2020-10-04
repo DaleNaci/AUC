@@ -15,7 +15,7 @@ class Name(commands.Cog):
 
     @commands.command()
     async def name(self, ctx):
-        old_name = ctx.author.nick
+        old_name = ctx.author.display_name
         new_name = ctx.message.content[6:]
 
         print(old_name)

@@ -28,7 +28,8 @@ class G(commands.Cog):
         for word in content:
             print(word)
             if word.upper() not in ["C", "I"]:
-                line.append(guild.get_member(int(word[3:-1])).nick)
+                member = guild.get_member(int(word[3:-1]))
+                line.append(guild.get_member(int(word[3:-1])).display_name)
             else:
                 line.append(word)
 

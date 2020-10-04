@@ -15,7 +15,8 @@ bot.remove_command("help")
 cogs = [
     "commands.help",
     "commands.g",
-    "commands.name"
+    "commands.name",
+    "commands.test"
 ]
 
 if __name__ == "__main__":
