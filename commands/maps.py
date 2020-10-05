@@ -19,9 +19,9 @@ class Maps(commands.Cog):
         )
 
         text = """
-        :green_circle: **The Skeld**
-        :blue_circle: **Mira HQ**
-        :red_circle: **Polus**
+        :green_circle: **The Skeld** (1)
+        :blue_circle: **Mira HQ** (2)
+        :red_circle: **Polus** (3)
         """
 
         embed.add_field(
