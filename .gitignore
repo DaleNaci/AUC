@@ -7,3 +7,8 @@ Lib
 Include
 pyvenv.cfg
 backend/__pycache__
+bin
+lib
+include
+lib64
+pip-selfcheck.json
