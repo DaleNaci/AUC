@@ -30,14 +30,9 @@ class Pick(commands.Cog):
         text = d[random.choice(nums)]
 
         embed = Embed(
-            title="Map Picker",
-            color=Color.from_rgb(0, 0, 0)
-        )
-
-
-        embed.add_field(
-            name="Map",
-            value=text
+            title="Map",
+            color=Color.from_rgb(0, 0, 0),
+            description=text
         )
 
         await ctx.send(embed=embed)
