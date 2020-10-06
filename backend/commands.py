@@ -115,7 +115,5 @@ def addGame(names, imps, isCrewWin):
 def changeName(oldname, newname):
     gc = gspread.service_account(filename='client_secret.json')
     entries = database.getRows([oldname], gc)
-    if entries: 
-        entries[0][1] = newname
-        database.updateEntries(entries, gc)
+    database.updateEntries(entries, gc)
     return True
