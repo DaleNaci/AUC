@@ -13,7 +13,8 @@ class Help(commands.Cog):
             "!help": "Provides information about all commands.",
             "!g": "Scorers use this to score games.",
             "!name": "Use this to rename yourself.",
-            "!maps": "Lists out maps for banning"
+            "!maps": "Lists out maps for banning",
+            "!pick": "Picks a map between two maps"
         }
 
 
