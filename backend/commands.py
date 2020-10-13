@@ -1,13 +1,15 @@
 import gspread
 import json
+
 import backend.database as database
-from backend import data_folder
+from backend import document
+from backend import datafolder
 
 winelo = {}
 losselo = {}
-with open(data_folder / 'winelo.json') as f:
+with open(datafolder / 'winelo.json') as f:
   winelo = json.load(f)
-with open(data_folder / 'losselo.json') as f:
+with open(datafolder / 'losselo.json') as f:
   losselo = json.load(f)
 
 #Determines how much ELO should change based on rank

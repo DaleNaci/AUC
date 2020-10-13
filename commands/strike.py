@@ -6,17 +6,17 @@ from discord.ext import commands
 from discord import Color, Embed
 
 import backend.commands as db
-
+from backend import admin
+from backend import strikechannel
 
 class Strike(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        # self.strike_channel_id = 764131932707487754
-        self.strike_channel_id = 763981972883636225
+        self.strike_channel_id = strikechannel
 
 
     @commands.command()
-    @commands.has_role("Administrator")
+    @commands.has_role("Admin")
     async def strike(self, ctx):
         channel = self.bot.get_channel(self.strike_channel_id)
 
@@ -61,7 +61,7 @@ class Strike(commands.Cog):
         full_text = f"```\n{inner_text}```"
         await msg.edit(content=full_text)
 
-        db.eloLoss(display_name)
+        db.elo_loss(display_name)
 
 
 
