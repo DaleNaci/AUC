@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import asyncio
 
 import discord
@@ -16,7 +17,9 @@ cogs = [
     "commands.help",
     "commands.g",
     "commands.name",
-    "commands.test"
+    "commands.test",
+    "commands.maps",
+    "commands.pick"
 ]
 
 if __name__ == "__main__":
