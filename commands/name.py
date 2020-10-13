@@ -21,7 +21,7 @@ class Name(commands.Cog):
         print(old_name)
         print(new_name)
 
-        db.changeName(old_name, new_name)
+        db.change_name(old_name, new_name)
 
         await ctx.author.edit(nick=new_name)
         await ctx.channel.send("Name Changed!")
