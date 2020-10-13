@@ -1,15 +1,15 @@
-aiohttp==3.6.2
+aiohttp==3.6.3
 async-timeout==3.0.1
 attrs==20.2.0
 cachetools==4.1.1
 certifi==2020.6.20
 chardet==3.0.4
-discord.py==1.4.2
-google-auth==1.22.1
+discord==1.0.1
+discord.py==1.5.0
+google-auth==1.21.2
 google-auth-oauthlib==0.4.1
 gspread==3.6.0
 idna==2.10
-idna-ssl==1.1.0
 multidict==4.7.6
 oauthlib==3.1.0
 pyasn1==0.4.8
@@ -20,4 +20,4 @@ rsa==4.6
 six==1.15.0
 typing-extensions==3.7.4.3
 urllib3==1.25.10
-yarl==1.6.0
+yarl==1.5.1

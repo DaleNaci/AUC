@@ -1,4 +1,5 @@
-import gspread, json
+import gspread
+import json
 import backend.database as database
 from backend import data_folder
 
@@ -12,7 +13,7 @@ with open(data_folder / 'losselo.json') as f:
 #Determines how much ELO should change based on rank
 #Input: 'rank' isCrewWin , isImp, isPlace
 #Output: elochange
-def getEloChange(rank, isCrewWin, isImp, isPlace):
+def elo_change(rank, isCrewWin, isImp, isPlace):
     elochange = 0
     if isCrewWin:
         elochange = winelo[rank]
@@ -29,7 +30,7 @@ def getEloChange(rank, isCrewWin, isImp, isPlace):
 #Adds a loss to the player
 #Input: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%'], isImp
 #Output: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
-def addLoss(entry, isImp):
+def add_loss(entry, isImp):
     if isImp:
         entry[7] = str(int(entry[7]) + 1)
     else:
@@ -40,18 +41,18 @@ def addLoss(entry, isImp):
 #Adds a win to the player
 #Input: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%'], isImp
 #Output: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
-def addWin(entry, isImp):
+def add_win(entry, isImp):
     if isImp:
         entry[5] = str(int(entry[5]) + 1)
     else:
         entry[6] = str(int(entry[6]) + 1)
-    return addLoss(entry, isImp)
+    return add_loss(entry, isImp)
 
 #Adjusts elo based on win, imp, and rank
 #Input: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%'], isCrewWin, isImp
 #Output: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
-def adjustElo(entry, isCrewWin, isImp):
-    elochange = getEloChange(entry[2], isCrewWin, isImp, int(entry[4]) <= 5)
+def adjust_elo(entry, isCrewWin, isImp):
+    elochange = elo_change(entry[2], isCrewWin, isImp, int(entry[4]) <= 5)
     newelo = int(entry[3]) + elochange
     entry[3] = str(newelo if newelo > 0 else 0)
     return entry
@@ -62,9 +63,9 @@ baseentry = ['0', '', 'Silver 1', '300', '0', '0', '0', '0', '0', '0']
 #A function to add a game to the database
 #Input: [names of players] [names of imps] isCrewWin
 #Outputs: succeeds
-def addGame(names, imps, isCrewWin):
+def add_game(names, imps, isCrewWin):
     gc = gspread.service_account(filename='client_secret.json')
-    entries = database.getRows(names, gc)
+    entries = database.get_rows(names, gc)
     entrynames = [entry[1] for entry in entries]
     newentrynames = []
     if not entrynames:
@@ -78,52 +79,54 @@ def addGame(names, imps, isCrewWin):
         for entry in newentries:
             if entry[1] in imps:
                 if not isCrewWin:
-                    addWin(entry, True)
-                    adjustElo(entry, True, True)
+                    add_win(entry, True)
+                    adjust_elo(entry, True, True)
                 else:
-                    addLoss(entry, True)
-                    adjustElo(entry, False, True)
+                    add_loss(entry, True)
+                    adjust_elo(entry, False, True)
             else:
                 if isCrewWin:
-                    addWin(entry, False)
-                    adjustElo(entry, True, False)
+                    add_win(entry, False)
+                    adjust_elo(entry, True, False)
                 else:
-                    addLoss(entry, False)
-                    adjustElo(entry, False, False)
+                    add_loss(entry, False)
+                    adjust_elo(entry, False, False)
     for entry in entries:
         if entry[1] in imps:
             if not isCrewWin:
-                addWin(entry, True)
-                adjustElo(entry, True, True)
+                add_win(entry, True)
+                adjust_elo(entry, True, True)
             else:
-                addLoss(entry, True)
-                adjustElo(entry, False, True)
+                add_loss(entry, True)
+                adjust_elo(entry, False, True)
         else:
             if isCrewWin:
-                addWin(entry, False)
-                adjustElo(entry, True, False)
+                add_win(entry, False)
+                adjust_elo(entry, True, False)
             else:
-                addLoss(entry, False)
-                adjustElo(entry, False, False)
-    database.addEntries(newentries, gc)
-    database.updateEntries(entries, gc)
+                add_loss(entry, False)
+                adjust_elo(entry, False, False)
+    database.add_entries(newentries, gc)
+    database.update_entries(entries, gc)
     return True
 
 #Changes name to a new name on database
 #Inputs: 'oldname' 'newname'
 #Outputs: succeeds
-def changeName(oldname, newname):
+def change_name(oldname, newname):
     gc = gspread.service_account(filename='client_secret.json')
-    entries = database.getRows([oldname], gc)
+    entries = database.get_rows([oldname], gc)
     if entries:
         entries[0][1] = newname
-        database.updateEntries(entries, gc)
+        database.update_entries(entries, gc)
     return True
 
-def eloLoss(name):
+#Adds an elo loss to a given player equal to that of a crew loss
+#Inputs: 'name'
+#Outputs: succeeds
+def elo_loss(name):
     gc = gspread.service_account(filename='client_secret.json')
-    entry = database.getRows([name], gc)
+    entry = database.get_rows([name], gc)
     if entry:
-        adjustElo(entry, False, False)
-        database.updateEntries(entry, gc)
+        database.update_entries(adjust_elo(entry, False, False), gc)
     return True

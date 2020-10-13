@@ -45,7 +45,7 @@ class G(commands.Cog):
                 imps = []
 
         for t in imps_wins:
-            db.addGame(members, t[0], t[1])
+            db.add_game(members, t[0], t[1])
 
         embed = Embed(
             title="Game Results",
