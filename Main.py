@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import asyncio
 
 import discord
@@ -9,7 +8,11 @@ from discord.utils import find
 
 
 client = discord.Client()
-bot = commands.Bot(command_prefix = "!")
+
+intents = discord.Intents.default()
+intents.members = True
+
+bot = commands.Bot(command_prefix = "!", intents=intents)
 
 bot.remove_command("help")
 
@@ -19,7 +22,8 @@ cogs = [
     "commands.name",
     "commands.test",
     "commands.maps",
-    "commands.pick"
+    "commands.pick",
+    "commands.strike"
 ]
 
 if __name__ == "__main__":
