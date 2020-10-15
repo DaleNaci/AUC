@@ -7,7 +7,7 @@ from discord.ext import commands
 from discord import Color, Embed
 
 import backend.commands as db
-
+from backend import mod
 
 class G(commands.Cog):
     def __init__(self, bot):
@@ -15,7 +15,7 @@ class G(commands.Cog):
 
 
     @commands.command()
-    @commands.has_role("GameMod")
+    @commands.has_role(mod)
     async def g(self, ctx):
         content = ctx.message.content
         content = re.sub(" +", " ", content)
@@ -45,7 +45,7 @@ class G(commands.Cog):
                 imps = []
 
         for t in imps_wins:
-            db.addGame(members, t[0], t[1])
+            db.add_game(members, t[0], t[1])
 
         embed = Embed(
             title="Game Results",
