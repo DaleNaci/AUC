@@ -6,11 +6,13 @@ from discord.ext import commands
 from discord import Color, Embed
 
 import backend.commands as db
+from backend import strikechannel
 
 
 class Name(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.strike_channel_id = strikechannel
 
 
     @commands.command()
@@ -20,6 +22,31 @@ class Name(commands.Cog):
 
         print(old_name)
         print(new_name)
+
+        channel = self.bot.get_channel(self.strike_channel_id)
+        async for msg in channel.history(limit=None):
+            text = msg.content.replace("```", "")
+            text_lst = text.split("\n")
+
+            d = {}
+            for line in text_lst:
+                try:
+                    name, strikes = line.rsplit(" - ", 1)
+                except:
+                    continue
+                d[name] = int(strikes)
+
+            if old_name in d:
+                d[new_name] = d[old_name]
+                del d[old_name]
+
+            inner_text = ""
+            for k, v in d.items():
+                inner_text += f"{k} - {v}\n"
+
+
+            full_text = f"```\n{inner_text}```"
+            await msg.edit(content=full_text)
 
         db.change_name(old_name, new_name)
 
