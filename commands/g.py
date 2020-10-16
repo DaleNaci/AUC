@@ -27,9 +27,10 @@ class G(commands.Cog):
         line = []
         for word in content:
             print(word)
-            if word.upper() not in ["C", "I"]:
-                member = guild.get_member(int(word[3:-1]))
-                line.append(guild.get_member(int(word[3:-1])).display_name)
+            tmp = re.sub('[<@!>]', '', word)
+            if tmp.upper() not in ["C", "I"]:
+                member = guild.get_member(int(tmp))
+                line.append(guild.get_member(int(tmp)).display_name)
             else:
                 line.append(word)
 
