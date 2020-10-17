@@ -130,5 +130,8 @@ def elo_loss(name):
     gc = gspread.service_account(filename='client_secret.json')
     entry = database.get_rows([name], gc)
     if entry:
-        database.update_entries(adjust_elo(entry, False, False), gc)
+        elochange = elo_change(entry[2], False, False, False)
+        newelo = int(entry[3]) + elochange
+        entry[3] = str(newelo if newelo > 0 else 0)
+        database.update_entries(entry, gc)
     return True
