@@ -9,6 +9,7 @@ from discord import Color, Embed
 import backend.commands as db
 from backend import mod
 
+
 class G(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

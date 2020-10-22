@@ -24,7 +24,8 @@ cogs = [
     "commands.test",
     "commands.maps",
     "commands.pick",
-    "commands.strike"
+    "commands.strike",
+    "commands.unstrike"
 ]
 
 if __name__ == "__main__":
