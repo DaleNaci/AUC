@@ -51,6 +51,9 @@ class Unstrike(commands.Cog):
         if display_name in d:
             d[display_name] -= 1
 
+        if d[display_name] == 0:
+            del d[display_name]
+
         inner_text = ""
         for k, v in d.items():
             inner_text += f"{k} - {v}\n"
