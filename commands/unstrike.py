@@ -16,7 +16,7 @@ class Unstrike(commands.Cog):
 
 
     @commands.command()
-    @commands.has_role("Admin")
+    @commands.has_role(admin)
     async def unstrike(self, ctx):
         channel = self.bot.get_channel(self.strike_channel_id)
 
