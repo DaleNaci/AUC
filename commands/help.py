@@ -6,6 +6,12 @@ from discord.ext import commands
 from discord import Color, Embed
 
 
+# This command displays a list of the current bot commands.
+#
+# !help
+#
+# NOTE: This command is TEMPORARY, will eventually be replaced by
+# Discord's built-in !help command.
 class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

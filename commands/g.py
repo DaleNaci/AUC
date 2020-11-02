@@ -10,6 +10,13 @@ import backend.commands as db
 from backend import mod
 
 
+# This command is used to score games.
+#
+# !g [tag 10 players] ([tag two imps] ['I' or 'C'])
+#
+# The first ten tagged players are the 10 players in the game.
+# The text in the parenthesis tag the 2 imps and then the team that won
+# each game, and can extend for as many games as needed.
 class G(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -18,6 +25,7 @@ class G(commands.Cog):
     @commands.command()
     @commands.has_role(mod)
     async def g(self, ctx):
+        # Splitting content into a list of each word
         content = ctx.message.content
         content = re.sub(" +", " ", content)
         content = content.split()[1:]
@@ -25,6 +33,8 @@ class G(commands.Cog):
         user_ids = [int(s[3:-1]) for s in content[:10]]
         guild = ctx.message.guild
 
+        # "line" represents original content except each tagged player
+        # is replaced by their display name
         line = []
         for word in content:
             print(word)
@@ -35,9 +45,13 @@ class G(commands.Cog):
             else:
                 line.append(word)
 
+        # List of the 10 players
         members = line[:10]
 
-        imps_wins = [] # List of tuples (imps[List], did imps win[Bool])
+        # List of tuples (imps[List], did imps win[Bool])
+        imps_wins = []
+
+        # Populate imps_wins
         imps = []
         for word in line[10:]:
             if len(imps) < 2:

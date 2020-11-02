@@ -6,6 +6,12 @@ from discord.ext import commands
 from discord import Color, Embed
 
 
+# This command is used for banning maps.
+#
+# !maps
+#
+# This brings up a list of the maps paired with a reaction. Players
+# can use these reactions to vote on the map to ban.
 class Maps(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -18,6 +24,7 @@ class Maps(commands.Cog):
             color=Color.from_rgb(0, 0, 0)
         )
 
+        # The numbers are used for the map picker
         text = """
         :green_circle: **The Skeld** (1)
         :blue_circle: **Mira HQ** (2)

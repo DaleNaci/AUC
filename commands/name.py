@@ -9,6 +9,12 @@ import backend.commands as db
 from backend import strikechannel
 
 
+# This command allows players to change their name.
+#
+# !name [new_name]
+#
+# This replaces the default nickname changing that Discord provides so
+# that their name will also be replaced in the spreadsheet.
 class Name(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -23,6 +29,7 @@ class Name(commands.Cog):
         print(old_name)
         print(new_name)
 
+        # This changes their name in the "#strikes" channel
         channel = self.bot.get_channel(self.strike_channel_id)
         async for msg in channel.history(limit=None):
             text = msg.content.replace("```", "")
