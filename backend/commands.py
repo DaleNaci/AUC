@@ -65,19 +65,24 @@ baseentry = ['0', '', 'Silver 1', '300', '0', '0', '0', '0', '0', '0']
 #A function to add a game to the database
 #Input: [names of players] [names of imps] isCrewWin
 #Outputs: succeeds
-def add_game(names, imps, isCrewWin):
+def add_game(ids, names, imps, isCrewWin):
     gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows(names, gc)
-    entrynames = [entry[1] for entry in entries]
+    entries = database.get_rows(ids, gc)
+    entrynames = [entry[2] for entry in entries]
+    entryids = [entry[1] for entry in entries]
     newentrynames = []
+    newentryids = []
     if not entrynames:
         newentrynames = names.copy()
+        newentryids = ids.copy()
     else:
         newentrynames = [name for name in names if not name in entrynames]
+        newentryids = [id for id in ids if not id in entryids]
     newentries = [baseentry.copy() for name in newentrynames]
     if newentrynames:
-        for num, name in enumerate(newentrynames):
-            newentries[num][1] = name
+        for num, name, id in enumerate(zip(newentrynames, newentryids)):
+            newentries[num][2] = name
+            newentries[num][1] = id
         for entry in newentries:
             if entry[1] in imps:
                 if not isCrewWin:
@@ -93,7 +98,8 @@ def add_game(names, imps, isCrewWin):
                 else:
                     add_loss(entry, False)
                     adjust_elo(entry, False, False)
-    for entry in entries:
+    for num, entry in enumerate(entries):
+        entry[2] = entrynames[num]
         if entry[1] in imps:
             if not isCrewWin:
                 add_win(entry, True)
@@ -137,6 +143,9 @@ def elo_loss(name):
         database.update_entries([entry], gc)
     return True
 
+#Adds an elo gain to a player equal to a crew win
+#Input: 'name'
+#Output: succeeds
 def elo_gain(name):
     gc = gspread.service_account(filename='client_secret.json')
     entries = database.get_rows([name], gc)

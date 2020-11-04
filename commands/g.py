@@ -26,12 +26,14 @@ class G(commands.Cog):
         guild = ctx.message.guild
 
         line = []
+        names = []
         for word in content:
             print(word)
             tmp = re.sub('[<@!>]', '', word)
             if tmp.upper() not in ["C", "I"]:
                 member = guild.get_member(int(tmp))
-                line.append(guild.get_member(int(tmp)).display_name)
+                names.append(guild.get_member(int(tmp)).display_name)
+                line.append(guild.get_member(int(tmp)).id)
             else:
                 line.append(word)
 
@@ -47,7 +49,7 @@ class G(commands.Cog):
                 imps = []
 
         for t in imps_wins:
-            db.add_game(members, t[0], t[1])
+            db.add_game(members, names, t[0], t[1])
 
         embed = Embed(
             title="Game Results",

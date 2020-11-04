@@ -2,36 +2,37 @@ import gspread
 from backend import document
 
 #Gets rows containing names passed
-#Inputs: list of names, google connection
-#Outputs: list of rows containing names
-#Format of output: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
-def get_rows(names, gc):
+#Inputs: list of ids, google connection
+#Outputs: list of rows containing ids
+#Format of output: ['row', 'userid', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'crew_wl', 'imp_wl', 'total_wl']
+def get_rows(ids, gc):
     database = gc.open(document)
     sheet = database.sheet1
     entries = sheet.get_all_values()
-    return [entry for entry in entries if entry[1] in names]
+    return [entry for entry in entries if entry[1] in ids]
 
 #Updates entries on google sheet
 #Inputs: list of entries, google connection
 #Outputs: succeeds
-#format of an entry: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
+#Format of output: ['row', 'userid', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'crew_wl', 'imp_wl', 'total_wl']
 def update_entries(entries, gc):
     database = gc.open(document)
     sheet = database.sheet1
     start = 'B'
-    startstats = 'D'
-    end = 'I'
+    endname = 'C'
+    startstats = 'E'
+    end = 'J'
     update = []
     for entry in entries:
-        update.append({'range': start + entry[0] + ':' + start + entry[0], 'values': [[entry[1]]]})
-        update.append({'range': startstats + entry[0] + ':' + end + entry[0], 'values': [entry[3:-1]]})
+        update.append({'range': start + entry[0] + ':' + endname + entry[0], 'values': [entry[1:2]]})
+        update.append({'range': startstats + entry[0] + ':' + end + entry[0], 'values': [entry[4:-1]]})
     sheet.batch_update(update, value_input_option='USER_ENTERED')
     return True
 
 #Adds entries to google sheet
 #Inputs: list of entries, google connection
 #Outputs: succeeds
-#format of an entry: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
+#Format of output: ['row', 'userid', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'crew_wl', 'imp_wl', 'total_wl']
 def add_entries(entries, gc):
     database = gc.open(document)
     sheet = database.sheet1
