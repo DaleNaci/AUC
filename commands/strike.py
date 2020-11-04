@@ -9,6 +9,13 @@ import backend.commands as db
 from backend import admin
 from backend import strikechannel
 
+
+# This command strikes players.
+#
+# !strike [@player]
+#
+# Strikes are work one crew loss and racking multiple strikes up
+# results in temp bans.
 class Strike(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

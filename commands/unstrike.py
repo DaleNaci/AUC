@@ -9,6 +9,13 @@ import backend.commands as db
 from backend import admin
 from backend import strikechannel
 
+
+# This command unstrikes someone.
+#
+# !unstrike [@player]
+#
+# This command reverts a strike on someone, and gives them back their
+# lost ELO.
 class Unstrike(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

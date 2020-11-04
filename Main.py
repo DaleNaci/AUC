@@ -10,6 +10,7 @@ from discord.utils import find
 
 client = discord.Client()
 
+# "Intents" are permissions set up by Discord.
 intents = discord.Intents.default()
 intents.members = True
 
@@ -17,6 +18,8 @@ bot = commands.Bot(command_prefix = "!", intents=intents)
 
 bot.remove_command("help")
 
+# These are all the cogs. When you add a command or a task, add a
+# reference point to this list using the "folder.file" format.
 cogs = [
     "commands.help",
     "commands.g",

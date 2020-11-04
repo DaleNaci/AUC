@@ -7,6 +7,12 @@ from discord.ext import commands
 from discord import Color, Embed
 
 
+# This command randomly picks between the two non-banned maps.
+#
+# !pick [#] [#]
+#
+# The two numbers represent the two maps that were not banned from
+# running the !maps command.
 class Pick(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -14,6 +20,7 @@ class Pick(commands.Cog):
 
     @commands.command()
     async def pick(self, ctx):
+        # These numbers are the same as the ones listed in !maps
         d = {
             "1": "The Skeld",
             "2": "Mira HQ",
