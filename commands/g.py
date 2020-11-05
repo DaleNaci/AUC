@@ -12,14 +12,16 @@ from backend import mod
 
 # This command is used to score games.
 #
-# !g [tag 10 players] ([tag two imps] ['I' or 'C'])
+# !g [tag X players] ([tag two imps] ['I' or 'C'])
 #
-# The first ten tagged players are the 10 players in the game.
+# X is the number of players in a game.
+# The first ten tagged players are the X players in the game.
 # The text in the parenthesis tag the 2 imps and then the team that won
 # each game, and can extend for as many games as needed.
 class G(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.player_count = 10
 
 
     @commands.command()
@@ -30,7 +32,7 @@ class G(commands.Cog):
         content = re.sub(" +", " ", content)
         content = content.split()[1:]
 
-        user_ids = [int(s[3:-1]) for s in content[:10]]
+        user_ids = [int(s[3:-1]) for s in content[:self.player_count]]
         guild = ctx.message.guild
 
         # "line" represents original content except each tagged player
@@ -47,15 +49,15 @@ class G(commands.Cog):
             else:
                 line.append(word)
 
-        # List of the 10 players
-        members = line[:10]
+        # List of the X players
+        members = line[:self.player_count]
 
         # List of tuples (imps[List], did imps win[Bool])
         imps_wins = []
 
         # Populate imps_wins
         imps = []
-        for word in line[10:]:
+        for word in line[self.player_count:]:
             if len(imps) < 2:
                 imps.append(word)
             else:
