@@ -80,9 +80,9 @@ def add_game(ids, names, imps, isCrewWin):
         newentryids = [id for id in ids if not id in entryids]
     newentries = [baseentry.copy() for name in newentrynames]
     if newentrynames:
-        for num, name, id in enumerate(zip(newentrynames, newentryids)):
-            newentries[num][2] = name
-            newentries[num][1] = id
+        for num, name_id_tuple in enumerate(zip(newentrynames, newentryids)):
+            newentries[num][2] = name_id_tuple[0]
+            newentries[num][1] = mame_id_tuple[1]
         for entry in newentries:
             if entry[1] in imps:
                 if not isCrewWin:
@@ -130,11 +130,11 @@ def change_name(oldname, newname):
     return True
 
 #Adds an elo loss to a given player equal to that of a crew loss
-#Inputs: 'name'
+#Inputs: 'id'
 #Outputs: succeeds
-def elo_loss(name):
+def elo_loss(id):
     gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([name], gc)
+    entries = database.get_rows([id], gc)
     entry = entries[0]
     if entry:
         elochange = elo_change(entry[2], False, True, False)
@@ -144,11 +144,11 @@ def elo_loss(name):
     return True
 
 #Adds an elo gain to a player equal to a crew win
-#Input: 'name'
+#Input: 'id'
 #Output: succeeds
-def elo_gain(name):
+def elo_gain(id):
     gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([name], gc)
+    entries = database.get_rows([id], gc)
     entry = entries[0]
     if entry:
         elochange = elo_change(entry[2], True, False, False)
@@ -156,3 +156,12 @@ def elo_gain(name):
         entry[3] = str(entry[3] if newlo > 0 else 0)
         database.update_entries([entry], gc)
     return True
+
+
+def get_elo(id):
+    gc = gspread.service_account(filename='client_secret.json')
+    entries = database.get_rows([id], gc)
+    entry = entries[0]
+    if entry:
+        return entry[4]
+    return -1
