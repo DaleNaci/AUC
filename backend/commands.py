@@ -60,7 +60,7 @@ def adjust_elo(entry, isCrewWin, isImp):
     return entry
 
 #The base entry for a new player
-baseentry = ['0', '','', 'Silver 1', '300', '0', '0', '0', '0', '0', '0']
+baseentry = ['0', '', '', 'Silver 1', '300', '0', '0', '0', '0', '0', '0', '0', '0']
 
 #A function to add a game to the database
 #Input: [names of players] [names of imps] isCrewWin
@@ -79,35 +79,36 @@ def add_game(ids, names, imps, isCrewWin):
             newentries[num][1] = name_id_tuple[1]
         for entry in newentries:
             if entry[1] in imps:
-                if isCrewWin:
+                if not isCrewWin:
                     add_win(entry, True)
-                    adjust_elo(entry, True, True)
+                    adjust_elo(entry, False, True)
                 else:
                     add_loss(entry, True)
-                    adjust_elo(entry, False, True)
+                    adjust_elo(entry, True, True)
             else:
-                if isCrewWin:
+                if not isCrewWin:
                     add_win(entry, False)
-                    adjust_elo(entry, True, False)
+                    adjust_elo(entry, False, False)
                 else:
                     add_loss(entry, False)
-                    adjust_elo(entry, False, False)
+                    adjust_elo(entry, True, False)
     for num, entry in enumerate(entries):
         entry[2] = entrynames[num]
         if entry[1] in imps:
-            if isCrewWin:
+            print('Hello')
+            if not isCrewWin:
                 add_win(entry, True)
-                adjust_elo(entry, True, True)
+                adjust_elo(entry, False, True)
             else:
                 add_loss(entry, True)
-                adjust_elo(entry, False, True)
+                adjust_elo(entry, True, True)
         else:
-            if isCrewWin:
+            if not isCrewWin:
                 add_win(entry, False)
-                adjust_elo(entry, True, False)
+                adjust_elo(entry, False, False)
             else:
                 add_loss(entry, False)
-                adjust_elo(entry, False, False)
+                adjust_elo(entry, True, False)
     database.add_entries(newentries, gc)
     database.update_entries(entries, gc)
     return True
