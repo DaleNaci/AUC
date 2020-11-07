@@ -45,6 +45,6 @@ def add_entries(entries, gc):
     update = sheet.get_all_values()
     update = [entry for entry in update if entry[1] == '']
     update = update[:len(entries)]
-    update = [[row[0] + entry[1:]] for entry, row in zip(entries, update)]
+    update = [[row[0]] + entry[1:] for entry, row in zip(entries, update)]
     update_entries(update, gc)
     return True
