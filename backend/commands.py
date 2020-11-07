@@ -160,7 +160,7 @@ def elo_gain(id):
 
 def get_elo(id):
     gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([id], gc)
+    entries = database.get_rows([str(id)], gc)
     entry = entries[0]
     if entry:
         return entry[4]
