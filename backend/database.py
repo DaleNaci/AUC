@@ -11,6 +11,12 @@ def get_rows(ids, gc):
     entries = sheet.get_all_values()
     return [entry for entry in entries if entry[1] in ids]
 
+def get_rows_by_name(names, gc):
+    database = gc.open(document)
+    sheet = database.sheet1
+    entries = sheet.get_all_values()
+    return [entry for entry in entries if entry[2] in ids]
+
 #Updates entries on google sheet
 #Inputs: list of entries, google connection
 #Outputs: succeeds
