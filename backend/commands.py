@@ -79,7 +79,7 @@ def add_game(ids, names, imps, isCrewWin):
             newentries[num][1] = name_id_tuple[1]
         for entry in newentries:
             if entry[1] in imps:
-                if not isCrewWin:
+                if isCrewWin:
                     add_win(entry, True)
                     adjust_elo(entry, True, True)
                 else:
@@ -95,7 +95,7 @@ def add_game(ids, names, imps, isCrewWin):
     for num, entry in enumerate(entries):
         entry[2] = entrynames[num]
         if entry[1] in imps:
-            if not isCrewWin:
+            if isCrewWin:
                 add_win(entry, True)
                 adjust_elo(entry, True, True)
             else:
