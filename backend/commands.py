@@ -73,7 +73,7 @@ def add_game(ids, names, imps, isCrewWin):
     entryids = [entry[1] for entry in entries]
     newentrynames = [name for name in names if not name in entrynames]
     newentryids = [id for id in ids if not id in entryids]
-    newentries = [baseentry.copy() for name in newentrynids]
+    newentries = [baseentry.copy() for name in newentryids]
     if newentries:
         for num, entry in enumerate(newentries):
             entry[1] = newentryids[num]
@@ -93,7 +93,7 @@ def add_game(ids, names, imps, isCrewWin):
                     add_win(entry, False)
                     adjust_elo(entry, True, False)
     for num, entry in enumerate(entries):
-        entry[2] = entrynames[num]
+        entry[2] = names[num]
         if entry[1] in imps:
             if not isCrewWin:
                 add_win(entry, True)
