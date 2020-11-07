@@ -56,7 +56,6 @@ def add_win(entry, isImp):
 def adjust_elo(entry, isCrewWin, isImp):
     elochange = elo_change(entry[3], isCrewWin, isImp, int(entry[5]) <= 5)
     newelo = int(entry[4]) + elochange
-    print(newelo)
     entry[4] = str(newelo if newelo > 0 else 0)
     return entry
 
@@ -69,7 +68,7 @@ baseentry = ['0', '', '', 'Bronze 3', '200', '0', '0', '0', '0', '0', '0', '0', 
 def add_game(ids, names, imps, isCrewWin):
     gc = gspread.service_account(filename='client_secret.json')
     entries = database.get_rows(ids, gc)
-    entrynames = [name for num, name in enumerate(names) if ids[num] == entries[num][1]]
+    entrynames = [name for num, name in enumerate(names) if entries and ids[num] == entries[num][1]]
     entryids = [entry[1] for entry in entries]
     newentrynames = [name for name in names if not name in entrynames]
     newentryids = [id for id in ids if not id in entryids]
