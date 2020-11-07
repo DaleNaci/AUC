@@ -4,6 +4,7 @@ import re
 import discord
 from discord.ext.commands import Bot
 from discord.ext import commands
+from discord.utils import get
 from discord import Color, Embed
 
 import backend.commands as db
@@ -21,7 +22,7 @@ from backend import mod
 class G(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.player_count = 10
+        self.player_count = 3
 
 
     @commands.command()
@@ -36,24 +37,32 @@ class G(commands.Cog):
         guild = ctx.message.guild
 
         # "line" represents original content except each tagged player
-        # is replaced by their display name
+        # is replaced by their id
         line = []
+
+        # "names" holds each player's display name
         names = []
+
+        i = 0
         for word in content:
             print(word)
             tmp = re.sub('[<@!>]', '', word)
             if tmp.upper() not in ["C", "I"]:
                 member = guild.get_member(int(tmp))
-                names.append(guild.get_member(int(tmp)).display_name)
                 line.append(guild.get_member(int(tmp)).id)
+                if i < self.player_count:
+                    names.append(guild.get_member(int(tmp)).display_name)
+                    i += 1
             else:
                 line.append(word)
 
-        # List of the X players
-        members = line[:self.player_count]
+        # List of the X players' ids
+        player_ids = line[:self.player_count]
 
         # List of tuples (imps[List], did imps win[Bool])
         imps_wins = []
+
+        # Data collection used for the embed
 
         # Populate imps_wins
         imps = []
@@ -64,9 +73,36 @@ class G(commands.Cog):
                 imps_wins.append((imps, word.upper() == "C"))
                 imps = []
 
+        # Calculating the actual games and ELO changes
+        lst = [str(i) for i in player_ids]
         for t in imps_wins:
-            db.add_game(members, names, t[0], t[1])
+            lst2 = [str(i) for i in t[0]]
+            db.add_game(lst, names, lst2, t[1])
 
+        # Checking if a role change is needed for every player
+        role_600 = get(ctx.message.guild.roles, name="600+")
+        role_900 = get(ctx.message.guild.roles, name="900+")
+
+        for id in player_ids:
+            member = guild.get_member(int(id))
+
+            elo_req = (db.get_elo(id) >= 600)
+            has_role = (role_600 in member.roles)
+
+            if elo_req and not has_role:
+                await member.add_roles(role_600)
+            if not elo_req and has_role:
+                await member.remove_roles(role_600)
+
+            elo_req = (db.get_elo(id) >= 900)
+            has_role = (role_900 in member.roles)
+
+            if elo_req and not has_role:
+                await member.add_roles(role_900)
+            if not elo_req and has_role:
+                await member.remove_roles(role_900)
+
+        # An embed is used for the output
         embed = Embed(
             title="Game Results",
             color=Color.from_rgb(0, 0, 0)
@@ -74,13 +110,19 @@ class G(commands.Cog):
 
         embed.add_field(
             name="Players",
-            value=", ".join(members),
+            value=", ".join(names),
             inline=False
         )
 
         i = 1
         for t in imps_wins:
-            imps = f"{t[0][0]}, {t[0][1]}"
+            # imps_wins stores the id's of the player, so imp_names is
+            # used to get the display names of the players
+            imp_names = [
+                guild.get_member(t[0][0]).display_name,
+                guild.get_member(t[0][1]).display_name
+            ]
+            imps = f"{imp_names[0]}, {imp_names[1]}"
             if t[1]:
                 text = "CREWMATES WIN"
             else:
