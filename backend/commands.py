@@ -30,33 +30,33 @@ def elo_change(rank, isCrewWin, isImp, isPlace):
     return elochange
 
 #Adds a loss to the player
-#Input: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%'], isImp
-#Output: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
+#Input: ['row', 'id', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%', 'crewwl%', 'impwl%'], isImp
+#Output: ['row', 'id', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%', 'crewwl%', 'impwl%']
 def add_loss(entry, isImp):
     if isImp:
-        entry[7] = str(int(entry[7]) + 1)
-    else:
         entry[8] = str(int(entry[8]) + 1)
-    entry[4] = str(int(entry[4]) + 1)
+    else:
+        entry[9] = str(int(entry[9]) + 1)
+    entry[5] = str(int(entry[5]) + 1)
     return entry
 
 #Adds a win to the player
-#Input: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%'], isImp
-#Output: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
+#Input: ['row', 'id', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%', 'crewwl%', 'impwl%'], isImp
+#Output: ['row', 'id', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%', 'crewwl%', 'impwl%']
 def add_win(entry, isImp):
     if isImp:
-        entry[5] = str(int(entry[5]) + 1)
-    else:
         entry[6] = str(int(entry[6]) + 1)
+    else:
+        entry[7] = str(int(entry[7]) + 1)
     return add_loss(entry, isImp)
 
 #Adjusts elo based on win, imp, and rank
-#Input: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%'], isCrewWin, isImp
-#Output: ['row', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%']
+#Input: ['row', 'id', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%', 'crewwl%', 'impwl%'], isCrewWin, isImp
+#Output: ['row', 'id', 'Name', 'rank', 'elo', 'total_games', 'imp_wins', 'crew_wins', 'times_imp', 'times_crew', 'wl%', 'crewwl%', 'impwl%']
 def adjust_elo(entry, isCrewWin, isImp):
-    elochange = elo_change(entry[2], isCrewWin, isImp, int(entry[4]) <= 5)
-    newelo = int(entry[3]) + elochange
-    entry[3] = str(newelo if newelo > 0 else 0)
+    elochange = elo_change(entry[3], isCrewWin, isImp, int(entry[4]) <= 5)
+    newelo = int(entry[4]) + elochange
+    entry[4] = str(newelo if newelo > 0 else 0)
     return entry
 
 #The base entry for a new player
@@ -175,9 +175,8 @@ def add_ids(players):
     for entry in entries:
         info = list(filter(lambda x: entry[2] in x, players))
         player = info[0]
-        new_entry = baseentry.copy();
+        new_entry = entry.copy();
         new_entry[1] = player[1]
-        new_entry[2] = player[0]
         new_entries.append(new_entry)
     database.update_entries(new_entries, gc)
     retrun True
