@@ -164,5 +164,13 @@ def get_elo(id):
     if entries:
         entry = entries[0]
         if entry:
-            return entry[4]
+            return int(entry[4])
     return -1
+
+def add_ids(players):
+    gc = gspread.service_account(filename='client_secret.json')
+    names = [player[0] for player in players]
+    entries = database.get_rows_by_name(names, gc)
+    for entry in entries:
+        player = list(filter(lambda x: ))
+    
