@@ -60,7 +60,7 @@ def adjust_elo(entry, isCrewWin, isImp):
     return entry
 
 #The base entry for a new player
-baseentry = ['0', '', '', 'Silver 1', '300', '0', '0', '0', '0', '0', '0', '0', '0']
+baseentry = ['0', '', '', 'Bronze 3', '200', '0', '0', '0', '0', '0', '0', '0', '0']
 
 #A function to add a game to the database
 #Input: [names of players] [names of imps] isCrewWin
@@ -171,7 +171,7 @@ def add_ids(players):
         info = list(filter(lambda x: entry[2] in x, players))
         player = info[0]
         new_entry = entry.copy();
-        new_entry[1] = player[1]
+        new_entry[1] = str(player[1])
         new_entries.append(new_entry)
     database.update_entries(new_entries, gc)
     return True
