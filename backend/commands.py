@@ -87,10 +87,10 @@ def add_game(ids, names, imps, isCrewWin):
                     adjust_elo(entry, True, True)
             else:
                 if not isCrewWin:
-                    add_win(entry, False)
+                    add_loss(entry, False)
                     adjust_elo(entry, False, False)
                 else:
-                    add_loss(entry, False)
+                    add_win(entry, False)
                     adjust_elo(entry, True, False)
     for num, entry in enumerate(entries):
         entry[2] = entrynames[num]
@@ -104,10 +104,10 @@ def add_game(ids, names, imps, isCrewWin):
                 adjust_elo(entry, True, True)
         else:
             if not isCrewWin:
-                add_win(entry, False)
+                add_loss(entry, False)
                 adjust_elo(entry, False, False)
             else:
-                add_loss(entry, False)
+                add_win(entry, False)
                 adjust_elo(entry, True, False)
     database.add_entries(newentries, gc)
     database.update_entries(entries, gc)
