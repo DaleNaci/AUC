@@ -179,6 +179,6 @@ def add_ids(players):
         new_entry[1] = player[1]
         new_entries.append(new_entry)
     database.update_entries(new_entries, gc)
-    retrun True
+    return True
 
     
