@@ -56,6 +56,7 @@ def add_win(entry, isImp):
 def adjust_elo(entry, isCrewWin, isImp):
     elochange = elo_change(entry[3], isCrewWin, isImp, int(entry[4]) <= 5)
     newelo = int(entry[4]) + elochange
+    print(newelo)
     entry[4] = str(newelo if newelo > 0 else 0)
     return entry
 
@@ -81,33 +82,33 @@ def add_game(ids, names, imps, isCrewWin):
             if entry[1] in imps:
                 if not isCrewWin:
                     add_win(entry, True)
-                    adjust_elo(entry, False, True)
+                    adjust_elo(entry, True, True)
                 else:
                     add_loss(entry, True)
-                    adjust_elo(entry, True, True)
+                    adjust_elo(entry, False, True)
             else:
                 if not isCrewWin:
                     add_loss(entry, False)
-                    adjust_elo(entry, False, False)
+                    adjust_elo(entry, True, False)
                 else:
                     add_win(entry, False)
-                    adjust_elo(entry, True, False)
+                    adjust_elo(entry, False, False)
     for num, entry in enumerate(entries):
         entry[2] = entrynames[num]
         if entry[1] in imps:
             if not isCrewWin:
                 add_win(entry, True)
-                adjust_elo(entry, False, True)
+                adjust_elo(entry, True, True)
             else:
                 add_loss(entry, True)
-                adjust_elo(entry, True, True)
+                adjust_elo(entry, False, True)
         else:
             if not isCrewWin:
                 add_loss(entry, False)
-                adjust_elo(entry, False, False)
+                adjust_elo(entry, True, False)
             else:
                 add_win(entry, False)
-                adjust_elo(entry, True, False)
+                adjust_elo(entry, False, False)
     database.add_entries(newentries, gc)
     database.update_entries(entries, gc)
     return True
