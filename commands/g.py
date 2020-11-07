@@ -22,7 +22,7 @@ from backend import mod
 class G(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.player_count = 3
+        self.player_count = 10
 
 
     @commands.command()
