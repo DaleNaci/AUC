@@ -77,38 +77,37 @@ def add_game(ids, names, imps, isCrewWin):
         for num, name_id_tuple in enumerate(zip(newentrynames, newentryids)):
             newentries[num][2] = name_id_tuple[0]
             newentries[num][1] = name_id_tuple[1]
-        for entry in newentries:
+        for num, entry in enumerate(newentries):
             if entry[1] in imps:
                 if not isCrewWin:
-                    add_win(entry, True)
-                    adjust_elo(entry, False, True)
+                    newentries[num] = add_win(entry, True)
+                    newentries[num] = adjust_elo(entry, False, True)
                 else:
-                    add_loss(entry, True)
-                    adjust_elo(entry, True, True)
+                    newentries[num] = add_loss(entry, True)
+                    newentries[num] = adjust_elo(entry, True, True)
             else:
                 if not isCrewWin:
-                    add_loss(entry, False)
-                    adjust_elo(entry, False, False)
+                    newentries[num] = add_loss(entry, False)
+                    newentries[num] = adjust_elo(entry, False, False)
                 else:
-                    add_win(entry, False)
-                    adjust_elo(entry, True, False)
+                    newentries[num] = add_win(entry, False)
+                    newentries[num] = adjust_elo(entry, True, False)
     for num, entry in enumerate(entries):
-        entry[2] = entrynames[num]
+        entries[num][2] = entrynames[num]
         if entry[1] in imps:
-            print('Hello')
             if not isCrewWin:
-                add_win(entry, True)
-                adjust_elo(entry, False, True)
+                entries[num] = add_win(entry, True)
+                entries[num] = adjust_elo(entry, False, True)
             else:
-                add_loss(entry, True)
-                adjust_elo(entry, True, True)
+                entries[num] = add_loss(entry, True)
+                entries[num] = adjust_elo(entry, True, True)
         else:
             if not isCrewWin:
-                add_loss(entry, False)
-                adjust_elo(entry, False, False)
+                entries[num] = add_loss(entry, False)
+                entries[num] = adjust_elo(entry, False, False)
             else:
-                add_win(entry, False)
-                adjust_elo(entry, True, False)
+                entries[num] = add_win(entry, False)
+                entries[num] = adjust_elo(entry, True, False)
     database.add_entries(newentries, gc)
     database.update_entries(entries, gc)
     return True
