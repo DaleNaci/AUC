@@ -30,7 +30,7 @@ def update_entries(entries, gc):
     end = 'J'
     update = []
     for entry in entries:
-        update.append({'range': start + entry[0] + ':' + endname + entry[0], 'values': [entry[1:2]]})
+        update.append({'range': start + entry[0] + ':' + endname + entry[0], 'values': [entry[1:3]]})
         update.append({'range': startstats + entry[0] + ':' + end + entry[0], 'values': [entry[4:-3]]})
     sheet.batch_update(update, value_input_option='USER_ENTERED')
     return True
