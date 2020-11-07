@@ -73,7 +73,7 @@ def add_game(ids, names, imps, isCrewWin):
     newentrynames = [name for name in names if not name in entrynames]
     newentryids = [id for id in ids if not id in entryids]
     newentries = [baseentry.copy() for name in newentrynames]
-    if newentires:
+    if newentries:
         for num, name_id_tuple in enumerate(zip(newentrynames, newentryids)):
             newentries[num][2] = name_id_tuple[0]
             newentries[num][1] = name_id_tuple[1]
