@@ -69,7 +69,7 @@ baseentry = ['0', '', '', 'Bronze 3', '200', '0', '0', '0', '0', '0', '0', '0', 
 def add_game(ids, names, imps, isCrewWin):
     gc = gspread.service_account(filename='client_secret.json')
     entries = database.get_rows(ids, gc)
-    entrynames = [entry[2] for entry in entries]
+    entrynames = [name for num, name in enumerate(names) if ids[num] == entries[num][1]]
     entryids = [entry[1] for entry in entries]
     newentrynames = [name for name in names if not name in entrynames]
     newentryids = [id for id in ids if not id in entryids]
@@ -93,7 +93,7 @@ def add_game(ids, names, imps, isCrewWin):
                     add_win(entry, False)
                     adjust_elo(entry, True, False)
     for num, entry in enumerate(entries):
-        entry[2] = names[num]
+        entry[2] = entrynames[num]
         if entry[1] in imps:
             if not isCrewWin:
                 add_win(entry, True)
