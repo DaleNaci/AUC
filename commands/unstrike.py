@@ -62,7 +62,7 @@ class Unstrike(commands.Cog):
         full_text = f"```\n{inner_text}```"
         await msg.edit(content=full_text)
 
-        db.elo_loss(display_name)
+        db.elo_gain(display_name)
 
 
 
