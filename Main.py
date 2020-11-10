@@ -29,7 +29,8 @@ cogs = [
     "commands.pick",
     "commands.strike",
     "commands.unstrike",
-    "commands.addids"
+    "commands.addids",
+    "commands.newseason"
 ]
 
 if __name__ == "__main__":
