@@ -33,7 +33,7 @@ class G(commands.Cog):
         content = re.sub(" +", " ", content)
         content = content.split()[1:]
 
-        user_ids = [int(s[3:-1]) for s in content[:self.player_count]]
+        user_ids = [int(re.sub('[<@!>]', '', s)) for s in content[:self.player_count]]
         guild = ctx.message.guild
 
         # "line" represents original content except each tagged player
