@@ -60,24 +60,23 @@ def adjust_elo(entry, isCrewWin, isImp):
     return entry
 
 #The base entry for a new player
-baseentry = ['0', '', '', 'Bronze 3', '200', '0', '0', '0', '0', '0', '0', '0', '0']
+baseentry = ['', '', 'Bronze 3', '200', '0', '0', '0', '0', '0']
 
 #A function to add a game to the database
 #Input: [names of players] [names of imps] isCrewWin
 #Outputs: succeeds
 def add_game(ids, names, imps, isCrewWin):
-    gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows(ids, gc)
-    entrynames = [names[ids.index(entry[1])] for num, entry in enumerate(entries) if entry[1] in ids]
-    entryids = [entry[1] for entry in entries]
+    entries = database.get_rows(ids)
+    entrynames = [names[ids.index(entry[0])] for num, entry in enumerate(entries) if entry[0] in ids]
+    entryids = [entry[0] for entry in entries]
     newentrynames = [name for name in names if not name in entrynames]
     newentryids = [id for id in ids if not id in entryids]
     newentries = [baseentry.copy() for name in newentryids]
     if newentries:
         for num, entry in enumerate(newentries):
-            entry[1] = newentryids[num]
-            entry[2] = newentrynames[num]
-            if entry[1] in imps:
+            entry[0] = newentryids[num]
+            entry[1] = newentrynames[num]
+            if entry[0] in imps:
                 if not isCrewWin:
                     add_win(entry, True)
                     adjust_elo(entry, True, True)
@@ -92,8 +91,8 @@ def add_game(ids, names, imps, isCrewWin):
                     add_win(entry, False)
                     adjust_elo(entry, True, False)
     for num, entry in enumerate(entries):
-        entry[2] = entrynames[num]
-        if entry[1] in imps:
+        entry[1] = entrynames[num]
+        if entry[0] in imps:
             if not isCrewWin:
                 add_win(entry, True)
                 adjust_elo(entry, True, True)
@@ -107,61 +106,49 @@ def add_game(ids, names, imps, isCrewWin):
             else:
                 add_win(entry, False)
                 adjust_elo(entry, True, False)
-    database.add_entries(newentries, gc)
-    database.update_entries(entries, gc)
-    return True
-
-#Changes name to a new name on database
-#Inputs: 'oldname' 'newname'
-#Outputs: succeeds
-def change_name(oldname, newname):
-    gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([oldname], gc)
-    if entries:
-        entries[0][1] = newname
-        database.update_entries(entries, gc)
+    database.add_entries(newentries)
+    database.update_entries(entries)
     return True
 
 #Adds an elo loss to a given player equal to that of a crew loss
 #Inputs: 'id'
 #Outputs: succeeds
 def elo_loss(id):
-    gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([id], gc)
+    entries = database.get_rows([id])
     entry = entries[0]
     if entry:
         elochange = elo_change(entry[2], False, True, False)
         newelo = int(entry[3]) + elochange
         entry[3] = str(newelo if newelo > 0 else 0)
-        database.update_entries([entry], gc)
+        database.update_entries([entry])
     return True
 
 #Adds an elo gain to a player equal to a crew win
 #Input: 'id'
 #Output: succeeds
 def elo_gain(id):
-    gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([id], gc)
+    entries = database.get_rows([id])
     entry = entries[0]
     if entry:
         elochange = elo_change(entry[2], True, False, False)
         newelo = int(entry[3]) + elochange
-        entry[3] = str(entry[3] if newlo > 0 else 0)
-        database.update_entries([entry], gc)
+        entry[3] = str(newelo if newelo > 0 else 0)
+        database.update_entries([entry])
     return True
 
 
 def get_elo(id):
-    gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([str(id)], gc)
+    entries = database.get_rows([str(id)])
     if entries:
         entry = entries[0]
         if entry:
-            return int(entry[4])
+            return int(entry[3])
     return -1
 
+
+#DEPRECEATED!!
 def add_ids(players):
-    gc = gspread.service_account(filename='client_secret.json')
+"""     gc = gspread.service_account(filename='client_secret.json')
     names = [player[0] for player in players]
     entries = database.get_rows_by_name(names, gc)
     new_entries = []
@@ -171,7 +158,7 @@ def add_ids(players):
         new_entry = entry.copy();
         new_entry[1] = str(player[1])
         new_entries.append(new_entry)
-    database.update_entries(new_entries, gc)
+    database.update_entries(new_entries, gc) """
     return True
 
     
