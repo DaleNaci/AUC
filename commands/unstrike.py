@@ -31,6 +31,7 @@ class Unstrike(commands.Cog):
         guild = ctx.guild
         member = guild.get_member(int(mention[3:-1]))
         display_name = member.display_name
+        id = member.id
 
         count = 0
         async for m in channel.history(limit=None):
@@ -69,7 +70,7 @@ class Unstrike(commands.Cog):
         full_text = f"```\n{inner_text}```"
         await msg.edit(content=full_text)
 
-        db.elo_gain(display_name)
+        db.elo_gain(id)
 
 
 

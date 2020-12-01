@@ -127,12 +127,12 @@ def change_name(oldname, newname):
 #Outputs: succeeds
 def elo_loss(id):
     gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([id], gc)
+    entries = database.get_rows([str(id)], gc)
     if entries:
         entry = entries[0]
-        elochange = elo_change(entry[2], False, True, False)
-        newelo = int(entry[3]) + elochange
-        entry[3] = str(newelo if newelo > 0 else 0)
+        elochange = elo_change(entry[3], False, True, False)
+        newelo = int(entry[4]) + elochange
+        entry[4] = str(newelo if newelo > 0 else 0)
         database.update_entries([entry], gc)
     return True
 
@@ -141,12 +141,12 @@ def elo_loss(id):
 #Output: succeeds
 def elo_gain(id):
     gc = gspread.service_account(filename='client_secret.json')
-    entries = database.get_rows([id], gc)
+    entries = database.get_rows([str(id)], gc)
     if entries:
-	entry = entries[0]
-        elochange = elo_change(entry[2], True, False, False)
-        newelo = int(entry[3]) + elochange
-        entry[3] = str(entry[3] if newlo > 0 else 0)
+        entry = entries[0]
+        elochange = elo_change(entry[3], True, False, False)
+        newelo = int(entry[4]) + elochange
+        entry[4] = str(newelo if newlo > 0 else 0)
         database.update_entries([entry], gc)
     return True
 
