@@ -7,7 +7,7 @@ from discord.ext import commands
 from discord.utils import get
 from discord.utils import find
 
-
+# TEST
 client = discord.Client()
 
 # "Intents" are permissions set up by Discord.
