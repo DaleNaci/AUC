@@ -30,8 +30,10 @@ cogs = [
     "commands.strike",
     "commands.unstrike",
     "commands.addids",
-    "commands.newseason"
+    "commands.newseason",
+    "commands.automated"
 ]
+
 
 if __name__ == "__main__":
     for cog in cogs:

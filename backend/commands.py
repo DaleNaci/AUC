@@ -24,9 +24,9 @@ def elo_change(rank, isCrewWin, isImp, isPlace):
     else:
         elochange = losselo[rank]
         if not isImp:
-            elochange *= 2
+            elochange *= 1
     if isPlace:
-        elochange *= 2
+        elochange *= 1
     return elochange
 
 #Adds a loss to the player
@@ -60,7 +60,7 @@ def adjust_elo(entry, isCrewWin, isImp):
     return entry
 
 #The base entry for a new player
-baseentry = ['0', '', '', 'Bronze 3', '200', '0', '0', '0', '0', '0', '0', '0', '0']
+baseentry = ['0', '', '', 'Non-Ranked', '0', '0', '0', '0', '0', '0', '0', '0', '0']
 
 #A function to add a game to the database
 #Input: [names of players] [names of imps] isCrewWin
@@ -173,5 +173,3 @@ def add_ids(players):
         new_entries.append(new_entry)
     database.update_entries(new_entries, gc)
     return True
-
-    

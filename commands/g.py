@@ -70,7 +70,7 @@ class G(commands.Cog):
             if len(imps) < 2:
                 imps.append(word)
             else:
-                imps_wins.append((imps, word.upper() == "C"))
+                imps_wins.append((imps, str(word).upper() == "C"))
                 imps = []
 
         # Calculating the actual games and ELO changes
